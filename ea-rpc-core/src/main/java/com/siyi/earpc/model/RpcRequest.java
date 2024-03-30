@@ -1,6 +1,5 @@
 package com.siyi.earpc.model;
 
-import com.siyi.earpc.serializer.Serializer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +21,6 @@ public class RpcRequest implements Serializable {
     private String methodName;
     //调用参数的类型列表
     private Class<?>[] parameterTypes;
-//    参数列表
+    //    参数列表
     private Object[] args;
 }

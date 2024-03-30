@@ -1,10 +1,11 @@
 package com.siyi.earpc.server;
 
+import com.siyi.earpc.RpcApplication;
 import com.siyi.earpc.model.RpcRequest;
 import com.siyi.earpc.model.RpcResponse;
 import com.siyi.earpc.register.LocalRegistry;
-import com.siyi.earpc.serializer.JdkSerializer;
 import com.siyi.earpc.serializer.Serializer;
+import com.siyi.earpc.serializer.SerializerFactory;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpServerRequest;
@@ -18,7 +19,7 @@ public class HttpServerHandler implements Handler<HttpServerRequest> {
     public void handle(HttpServerRequest request) {
         // 1. 转换为对象,从对象中获得参数
         //指定序列化器
-        final Serializer serializer = new JdkSerializer();
+        final Serializer serializer = SerializerFactory.getInstance(RpcApplication.getRpcConfig().getSerializer());
         //记录日志
         System.out.println("Received request: " + request.method() + " " + request.uri());
         request.bodyHandler(body -> {

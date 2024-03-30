@@ -6,6 +6,7 @@ import com.siyi.earpc.model.RpcRequest;
 import com.siyi.earpc.model.RpcResponse;
 import com.siyi.earpc.serializer.JdkSerializer;
 import com.siyi.earpc.serializer.Serializer;
+
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -34,7 +35,7 @@ public class ServiceProxy implements InvocationHandler {
             }
 
             RpcResponse response = serializer.deserialize(result, RpcResponse.class);
-            return  response.getData();
+            return response.getData();
         } catch (IOException e) {
             e.printStackTrace();
         }

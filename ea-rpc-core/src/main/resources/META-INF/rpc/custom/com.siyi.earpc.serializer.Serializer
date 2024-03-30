@@ -1,0 +1,3 @@
+hessian=com.siyi.earpc.serializer.HessianSerializer
+json=com.siyi.earpc.serializer.JsonSerializer
+kryo=com.siyi.earpc.serializer.KryoSerializer

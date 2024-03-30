@@ -11,14 +11,14 @@ public class VertHttpServerExample implements HttpServer {
         io.vertx.core.http.HttpServer server = vertx.createHttpServer();
         // 3. 监听端口的通知执行任务
         server.requestHandler(request -> {
-            System.out.println("receive request:"+ request.method()+"request url:"+request.uri());
-        // 4. 发送响应
-            request.response().putHeader("content-type","text/plain").end("hello from vert.x HTTP Server");
+            System.out.println("receive request:" + request.method() + "request url:" + request.uri());
+            // 4. 发送响应
+            request.response().putHeader("content-type", "text/plain").end("hello from vert.x HTTP Server");
         });
         // 5. 启动http服务器监听端口
         server
-                .listen(8080,res->
-                 {
+                .listen(8080, res ->
+                {
                     if (res.succeeded()) {
                         System.out.println("Server is now listening!");
                     } else {

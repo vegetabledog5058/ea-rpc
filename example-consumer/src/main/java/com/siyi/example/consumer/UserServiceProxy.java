@@ -8,7 +8,6 @@ import com.siyi.earpc.serializer.JdkSerializer;
 import com.siyi.earpc.serializer.Serializer;
 import com.siyi.example.common.model.User;
 import com.siyi.example.common.service.UserService;
-import io.vertx.core.http.HttpServerRequest;
 
 import java.io.IOException;
 

@@ -2,10 +2,12 @@ package com.siyi.earpc.proxy;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
+import com.siyi.earpc.RpcApplication;
 import com.siyi.earpc.model.RpcRequest;
 import com.siyi.earpc.model.RpcResponse;
-import com.siyi.earpc.serializer.JdkSerializer;
 import com.siyi.earpc.serializer.Serializer;
+import com.siyi.earpc.serializer.SerializerFactory;
+
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -14,10 +16,10 @@ public class ServiceProxy implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         //指定序列化器
-        Serializer serializer = new JdkSerializer();
+        final Serializer serializer = SerializerFactory.getInstance(RpcApplication.getRpcConfig().getSerializer());
         //发送请求
         RpcRequest rpcRequest = RpcRequest.builder()
-                .name(method.getDeclaringClass().getName())
+                  .name(method.getDeclaringClass().getName())
                 .methodName(method.getName())
                 .args(args)
                 .parameterTypes(method.getParameterTypes())
@@ -34,7 +36,7 @@ public class ServiceProxy implements InvocationHandler {
             }
 
             RpcResponse response = serializer.deserialize(result, RpcResponse.class);
-            return  response.getData();
+            return response.getData();
         } catch (IOException e) {
             e.printStackTrace();
         }

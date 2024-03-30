@@ -10,7 +10,7 @@ public class RpcProviderExample {
 
     public static void main(String[] args) {
         RpcApplication.init();
-        LocalRegistry.register(UserService.class.getName(),UserServiceImpl.class);
+        LocalRegistry.register(UserService.class.getName(), UserServiceImpl.class);
         HttpServer httpServer = new VertxHttpServer();
         httpServer.start(RpcApplication.getRpcConfig().getServerPort());
     }

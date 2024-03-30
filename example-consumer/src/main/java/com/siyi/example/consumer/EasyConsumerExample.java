@@ -9,7 +9,7 @@ public class EasyConsumerExample {
         //静态代理
 //        UserService userService = new UserServiceProxy();
         // 获取USerService的实现类对象
-            UserService userService = ServiceProxyFactory.getProxy(UserService.class);
+        UserService userService = ServiceProxyFactory.getProxy(UserService.class);
         User user = new User();
         user.setName("张三");
         //调用
@@ -19,8 +19,8 @@ public class EasyConsumerExample {
         } else {
             System.out.println("user == null");
         }
-        long number = userService.getNumber();
-        System.out.println(number);
+//        long number = userService.getNumber();
+//        System.out.println(number);
     }
 
 }

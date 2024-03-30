@@ -2,7 +2,7 @@ package com.siyi.earpc.serializer;
 
 import java.io.*;
 
-public class JdkSerializer implements Serializer{
+public class JdkSerializer implements Serializer {
 
     /**
      * 序列化
