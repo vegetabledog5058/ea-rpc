@@ -1,4 +1,0 @@
-rpc.name=ea-rpc
-rpc.version=2.0
-rpc.serverPort=8080
-rpc.serializer=hessian

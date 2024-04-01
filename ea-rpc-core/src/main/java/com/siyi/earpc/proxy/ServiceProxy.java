@@ -1,16 +1,24 @@
 package com.siyi.earpc.proxy;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import com.siyi.earpc.RpcApplication;
+import com.siyi.earpc.config.RegistryConfig;
+import com.siyi.earpc.config.RpcConfig;
+import com.siyi.earpc.constant.RpcConstant;
 import com.siyi.earpc.model.RpcRequest;
 import com.siyi.earpc.model.RpcResponse;
+import com.siyi.earpc.model.ServiceMetaInfo;
+import com.siyi.earpc.register.Registry;
+import com.siyi.earpc.register.RegistryFactory;
 import com.siyi.earpc.serializer.Serializer;
 import com.siyi.earpc.serializer.SerializerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.List;
 
 public class ServiceProxy implements InvocationHandler {
     @Override
@@ -28,8 +36,25 @@ public class ServiceProxy implements InvocationHandler {
         try {
             byte[] bytes = serializer.serialize(rpcRequest);
             byte[] result;
-            // TODO 这里硬编码可以依靠注册中心硬编码解决
-            try (HttpResponse httpResponse = HttpRequest.post("http://localhost:8080")
+            // 依靠注册中心解决硬编码问题
+            String serviceName = method.getDeclaringClass().getName();
+            //获取注册中心
+            RpcConfig rpcConfig = RpcApplication.getRpcConfig();
+            //获取注册中心的实例
+            Registry registry = RegistryFactory.getInstance(rpcConfig.getRegistryConfig().getRegistry());
+            ServiceMetaInfo serviceMetaInfo = new ServiceMetaInfo();
+            //将服务名和版本号赋值给serviceMetaInfo
+            serviceMetaInfo.setServiceName(serviceName);
+            serviceMetaInfo.setServiceVersion(RpcConstant.DEFAULT_SERVICE_VERSION);
+            //得到服务名后，这里获取服务元信息
+            List<ServiceMetaInfo> discoveryList = registry.discovery(serviceMetaInfo.getServiceKey());
+            if (CollUtil.isEmpty(discoveryList)) {
+                throw new RuntimeException("暂无服务地址");
+            }
+            //之后获取服务地址
+            //TODO 暂时只取第一个,后续可扩展负载均衡策略
+            ServiceMetaInfo selectedServiceMetaInfo  = discoveryList.get(0);
+            try (HttpResponse httpResponse = HttpRequest.post(selectedServiceMetaInfo.getServiceAddress())
                     .body(bytes)
                     .execute()) {
                 result = httpResponse.bodyBytes();

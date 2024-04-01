@@ -1,5 +1,6 @@
 package com.siyi.earpc.model;
 
+import com.siyi.earpc.constant.RpcConstant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,4 +24,6 @@ public class RpcRequest implements Serializable {
     private Class<?>[] parameterTypes;
     //    参数列表
     private Object[] args;
+    //    服务版本号
+    private String serviceVersion  = RpcConstant.DEFAULT_SERVICE_VERSION;
 }

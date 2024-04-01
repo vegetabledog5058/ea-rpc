@@ -1,7 +1,10 @@
 package com.siyi.earpc;
 
+import com.siyi.earpc.config.RegistryConfig;
 import com.siyi.earpc.config.RpcConfig;
 import com.siyi.earpc.constant.RpcConstant;
+import com.siyi.earpc.register.Registry;
+import com.siyi.earpc.register.RegistryFactory;
 import com.siyi.earpc.utils.ConfigUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,6 +24,11 @@ public class RpcApplication {
     public static void init(RpcConfig newRpcConfig) {
         rpcConfig = newRpcConfig;
         log.info("rpc init, config = {}", newRpcConfig.toString());
+        //注册中心初始化
+        RegistryConfig registryConfig = new RegistryConfig();
+        Registry registry = RegistryFactory.getInstance(registryConfig.getRegistry());
+        registry.init(registryConfig);
+        log.info("registry init, config = {}", registryConfig);
     }
 
     /**
