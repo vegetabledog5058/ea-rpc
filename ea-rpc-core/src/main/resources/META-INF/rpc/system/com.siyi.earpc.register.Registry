@@ -1,1 +1,2 @@
 Etcd=com.siyi.earpc.register.EtcdRegistry
+zookeeper=com.siyi.earpc.register.ZooKeeperRegistry
