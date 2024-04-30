@@ -1,0 +1,3 @@
+roundRobin=com.siyi.earpc.loadbalancer.RoundRobinLoadBalancer
+random=com.siyi.earpc.loadbalancer.RandomLoadBalancer
+consistentHash=com.siyi.earpc.loadbalancer.ConsistentHashLoadBalancer

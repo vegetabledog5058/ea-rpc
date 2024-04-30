@@ -8,6 +8,8 @@ import com.siyi.earpc.RpcApplication;
 import com.siyi.earpc.config.RegistryConfig;
 import com.siyi.earpc.config.RpcConfig;
 import com.siyi.earpc.constant.RpcConstant;
+import com.siyi.earpc.loadbalancer.LoadBalancer;
+import com.siyi.earpc.loadbalancer.LoadBalancerFactory;
 import com.siyi.earpc.model.RpcRequest;
 import com.siyi.earpc.model.RpcResponse;
 import com.siyi.earpc.model.ServiceMetaInfo;
@@ -24,7 +26,9 @@ import io.vertx.core.net.NetClient;
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 public class ServiceProxy implements InvocationHandler {
@@ -53,9 +57,12 @@ public class ServiceProxy implements InvocationHandler {
             if (CollUtil.isEmpty(discoveryList)) {
                 throw new RuntimeException("暂无服务地址");
             }
-            //之后获取服务地址
-            //TODO 暂时只取第一个,后续可扩展负载均衡策略
-            ServiceMetaInfo selectedServiceMetaInfo = discoveryList.get(0);
+            //通过负载均衡获取服务地址
+            LoadBalancer loadBalancer = LoadBalancerFactory.getInstance(rpcConfig.getLoadBalancer());
+            // 将调用方法名（请求路径）作为负载均衡参数
+            Map<String, Object> requestParams = new HashMap<>();
+            requestParams.put("methodName", rpcRequest.getMethodName());
+            ServiceMetaInfo selectedServiceMetaInfo = loadBalancer.select(requestParams, discoveryList);
             // 发送 TCP 请求
             RpcResponse rpcResponse = VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo);
             return rpcResponse.getData();
