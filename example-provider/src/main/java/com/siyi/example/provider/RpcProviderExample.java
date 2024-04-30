@@ -8,6 +8,8 @@ import com.siyi.earpc.register.Registry;
 import com.siyi.earpc.register.RegistryFactory;
 import com.siyi.earpc.server.HttpServer;
 import com.siyi.earpc.server.VertxHttpServer;
+import com.siyi.earpc.server.tcp.VertxTcpClient;
+import com.siyi.earpc.server.tcp.VertxTcpServer;
 import com.siyi.example.common.service.UserService;
 
 /**
@@ -34,7 +36,9 @@ public class RpcProviderExample {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        HttpServer httpServer = new VertxHttpServer();
-        httpServer.start(RpcApplication.getRpcConfig().getServerPort());
+        //启动TCP服务
+        VertxTcpServer vertxTcpServer = new VertxTcpServer();
+        vertxTcpServer.start(RpcApplication.getRpcConfig().getServerPort());
+
     }
 }
