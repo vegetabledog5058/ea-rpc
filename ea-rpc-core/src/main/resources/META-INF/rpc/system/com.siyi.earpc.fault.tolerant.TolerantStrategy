@@ -1,0 +1,4 @@
+failBack=com.siyi.earpc.fault.tolerant.FailBackTolerantStrategy
+failFast=com.siyi.earpc.fault.tolerant.FailFastTolerantStrategy
+failOver=com.siyi.earpc.fault.tolerant.FailOverTolerantStrategy
+failSafe=com.siyi.earpc.fault.tolerant.FailSafeTolerantStrategy
