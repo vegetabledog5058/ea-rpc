@@ -8,6 +8,8 @@ import com.siyi.earpc.RpcApplication;
 import com.siyi.earpc.config.RegistryConfig;
 import com.siyi.earpc.config.RpcConfig;
 import com.siyi.earpc.constant.RpcConstant;
+import com.siyi.earpc.fault.retry.RetryStrategy;
+import com.siyi.earpc.fault.retry.RetryStrategyFactory;
 import com.siyi.earpc.loadbalancer.LoadBalancer;
 import com.siyi.earpc.loadbalancer.LoadBalancerFactory;
 import com.siyi.earpc.model.RpcRequest;
@@ -63,8 +65,11 @@ public class ServiceProxy implements InvocationHandler {
             Map<String, Object> requestParams = new HashMap<>();
             requestParams.put("methodName", rpcRequest.getMethodName());
             ServiceMetaInfo selectedServiceMetaInfo = loadBalancer.select(requestParams, discoveryList);
-            // 发送 TCP 请求
-            RpcResponse rpcResponse = VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo);
+            // 发送 TCP 请求,使用重试策略
+            RetryStrategy retryStrategy = RetryStrategyFactory.getInstance(rpcConfig.getRetryStrategy());
+            RpcResponse rpcResponse = retryStrategy.doRetry(() ->
+                    VertxTcpClient.doRequest(rpcRequest, selectedServiceMetaInfo)
+            );
             return rpcResponse.getData();
         } catch (Exception e) {
             throw new RuntimeException("调用失败");

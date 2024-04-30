@@ -1,5 +1,6 @@
 package com.siyi.earpc.config;
 
+import com.siyi.earpc.fault.retry.RetryStrategyKeys;
 import com.siyi.earpc.loadbalancer.LoadBalancerKeys;
 import com.siyi.earpc.serializer.SerializerKeys;
 import lombok.Data;
@@ -48,6 +49,10 @@ public class RpcConfig {
      * 负载均衡器
      */
     private String loadBalancer = LoadBalancerKeys.ROUND_ROBIN;
+    /**
+     * 重试策略
+     */
+    private String retryStrategy = RetryStrategyKeys.NO;
 
 
 }

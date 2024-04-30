@@ -1,0 +1,2 @@
+no=com.siyi.earpc.fault.retry.NoRetryStrategy
+fixedInterval=com.siyi.earpc.fault.retry.FixedIntervalRetryStrategy
