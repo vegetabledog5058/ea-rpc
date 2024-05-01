@@ -5,7 +5,7 @@ package com.siyi.earpc.register;
  */
 public interface RegistryKeys {
 
-    String ETCD = "etcd";
+    String ETCD = "Etcd";
 
     String ZOOKEEPER = "zookeeper";
 
